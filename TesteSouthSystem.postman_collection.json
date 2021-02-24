@@ -1,0 +1,260 @@
+{
+	"info": {
+		"_postman_id": "50fdbcde-8802-48ce-a666-3bfa7ac46ee7",
+		"name": "TesteSouthSystem",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "FakeRestApi",
+			"item": [
+				{
+					"name": "Fluxo Excecao",
+					"item": [
+						{
+							"name": "Users - id Inexistente",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Código do status 404, ausência de parâmetros\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validar mensagem de id não encontrado\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.title).to.eql(\"Not Found\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/Users/0",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Users",
+										"0"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Users - userName Invalido",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Código do status 400, requisição rejeitada por não atender os requisitos\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validar mensagem de userName Inválido\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.title).to.eql(\"One or more validation errors occurred.\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": {{$randomBankAccount}},\r\n  \"userName\": 1,\r\n  \"password\": \"{{$randomPassword}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Users",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Users"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Código do status 200, requisição feita com sucesso\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"idUser\", jsonData.id);\r",
+									"postman.setEnvironmentVariable(\"userName\", jsonData.userName);\r",
+									"postman.setEnvironmentVariable(\"password\", jsonData.password);\r",
+									"\r",
+									"pm.test(\"Validar retorno dos parâmetros userName e password\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.userName).to.eql(pm.environment.get(\"userName\"));\r",
+									"    pm.expect(jsonData.password).to.eql(pm.environment.get(\"password\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{$randomBankAccount}},\r\n  \"userName\": \"{{$randomUserName}}\",\r\n  \"password\": \"{{$randomPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Código do status 200, requisição feita com sucesso\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/Users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Código do status 200, requisição feita com sucesso\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"userName\", jsonData.userName);\r",
+									"postman.setEnvironmentVariable(\"password\", jsonData.password);\r",
+									"\r",
+									"pm.test(\"Validar retorno da alteração dos parâmetros userName e password\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.userName).to.eql(pm.environment.get(\"userName\"));\r",
+									"    pm.expect(jsonData.password).to.eql(pm.environment.get(\"password\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{idUser}},\r\n  \"userName\": \"{{$randomUserName}}\",\r\n  \"password\": \"{{$randomPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Users/{{idUser}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Users",
+								"{{idUser}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Código do status 200, requisição feita com sucesso\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/Users/{{idUser}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Users",
+								"{{idUser}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
